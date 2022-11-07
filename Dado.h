@@ -2,13 +2,13 @@
 #define DADO_H
 
 class Dado {
-    private:
+    protected:
         int valor;
     public:
         Dado(int valor);
         virtual ~Dado();
-        int getValor();
-        void imprimir();
+        virtual int getValor();
+        virtual void imprimir();
 };
 
 #endif
