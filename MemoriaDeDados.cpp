@@ -9,6 +9,7 @@ MemoriaDeDados::MemoriaDeDados(int tamanho): tamanho (tamanho) {
         dados[i] = NULL;
     }
 }
+
 MemoriaDeDados::~MemoriaDeDados() {
     for (int i = 0; i < tamanho; i++) {
         delete dados[i];

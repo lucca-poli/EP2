@@ -45,7 +45,7 @@ int Instrucao::getFuncao() {
 }
 
 void Instrucao::imprimir() {
-    cout << "\tInstrucao " << valor;
+    cout << "Instrucao " << valor;
 }
 
 Instrucao* Instrucao::criarLW(int destino, int imediato) {

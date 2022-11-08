@@ -3,7 +3,7 @@
 #include "Dado.h"
 
 class Memoria {
-    private:
+    protected:
     public:
         Memoria();
         virtual ~Memoria();

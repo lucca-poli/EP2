@@ -16,7 +16,8 @@ BancoDeRegistradores::~BancoDeRegistradores() {
 
 int BancoDeRegistradores::getValor(int registrador) {
     if (registrador < 0 || registrador > 31) {
-        throw new logic_error("Erro logico - getValor");
+        throw new logic_error("Erro logico - BancoDeRegistradores::getValor");
+        return;
     }
     if (registrador == 0) {
         return 0;
@@ -26,7 +27,7 @@ int BancoDeRegistradores::getValor(int registrador) {
 
 void BancoDeRegistradores::setValor(int registrador, int valor) {
     if (registrador < 0 || registrador > 31) {
-        throw new logic_error("Erro logico - setValor");
+        throw new logic_error("Erro logico - BancoDeRegistradores::setValor");
     }
     if (registrador == 0) {
         return;
@@ -36,6 +37,6 @@ void BancoDeRegistradores::setValor(int registrador, int valor) {
 
 void BancoDeRegistradores::imprimir() {
     for (int i = 0; i < QUANTIDADE_REGISTRADORES; i++) {
-        cout << "\t" << i << ": " << Registradores[i] << endl;
+        cout << i << ": " << Registradores[i] << endl;
     }
 }
