@@ -1,5 +1,6 @@
 #include "BancoDeRegistradores.h"
 #include <iostream>
+#include <stdexcept>
 using namespace std;
 
 BancoDeRegistradores::BancoDeRegistradores() {
@@ -14,7 +15,10 @@ BancoDeRegistradores::~BancoDeRegistradores() {
 }
 
 int BancoDeRegistradores::getValor(int registrador) {
-    if (registrador <= 0 || registrador > 31) {
+    if (registrador < 0 || registrador > 31) {
+        throw new logic_error("Erro logico - getValor");
+    }
+    if (registrador == 0) {
         return 0;
     }
     return this->Registradores[registrador];
@@ -22,6 +26,9 @@ int BancoDeRegistradores::getValor(int registrador) {
 
 void BancoDeRegistradores::setValor(int registrador, int valor) {
     if (registrador < 0 || registrador > 31) {
+        throw new logic_error("Erro logico - setValor");
+    }
+    if (registrador == 0) {
         return;
     }
     Registradores[registrador] = valor;
@@ -29,6 +36,6 @@ void BancoDeRegistradores::setValor(int registrador, int valor) {
 
 void BancoDeRegistradores::imprimir() {
     for (int i = 0; i < QUANTIDADE_REGISTRADORES; i++) {
-        cout << i << ": " << Registradores[i] << endl;
+        cout << "\t" << i << ": " << Registradores[i] << endl;
     }
 }

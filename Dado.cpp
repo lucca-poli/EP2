@@ -5,7 +5,7 @@ using namespace std;
 Dado::Dado(int valor): valor (valor) {
 }
 
-Dado::~Dado(){
+Dado::~Dado() {
 }
 
 int Dado::getValor() {
