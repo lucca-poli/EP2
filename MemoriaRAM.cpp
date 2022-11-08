@@ -8,6 +8,7 @@ MemoriaRAM::MemoriaRAM(int tamanho): tamanho (tamanho) {
     for (int i = 0; i < tamanho; i++) {
         Dados[i] = NULL;
     }
+    q = 0;
 }
 
 MemoriaRAM::~MemoriaRAM() {
@@ -18,17 +19,16 @@ MemoriaRAM::~MemoriaRAM() {
 }
 
 void MemoriaRAM::escrever(list<Dado*>* dados) {
-    if (dados->size() > tamanho) {
+    if (dados->size() > tamanho - q) {
         throw new logic_error("Erro logico - MemoriaRAM::escrever");
         return;
     }
-    int j = 0;
     for (list<Dado*>::iterator i = dados->begin(); i != dados->end(); i++) {
-        if (Dados[j] != NULL) {
-            delete Dados[j];
+        if (Dados[q] != NULL) {
+            delete Dados[q];
         }
-        Dados[j] = (*i);
-        j++;
+        Dados[q] = (*i);
+        q++;
     }
 }
 

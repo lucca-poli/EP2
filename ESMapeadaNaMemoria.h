@@ -7,6 +7,8 @@
 
 class ESMapeadaNaMemoria: public Memoria {
     private:
+        MemoriaRAM* Memoria;
+        vector<Dispositivo*>* Dispositivos;
     public:
         ESMapeadaNaMemoria(MemoriaRAM* m);
         ESMapeadaNaMemoria(MemoriaRAM* m, vector<Dispositivo*>* dispositivos);
@@ -18,8 +20,6 @@ class ESMapeadaNaMemoria: public Memoria {
         Dado* ler(int posicao);
         void escrever(int posicao, Dado* d);
         void imprimir();
-        Dado* ler();
-        void escrever(Dado* d);
 };
 
 #endif

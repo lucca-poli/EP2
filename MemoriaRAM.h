@@ -9,6 +9,7 @@ class MemoriaRAM: public Memoria {
     private:
         Dado** Dados;
         int tamanho;
+        int q;
     public:
         MemoriaRAM(int tamanho);
         virtual ~MemoriaRAM();
