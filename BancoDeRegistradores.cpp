@@ -17,7 +17,6 @@ BancoDeRegistradores::~BancoDeRegistradores() {
 int BancoDeRegistradores::getValor(int registrador) {
     if (registrador < 0 || registrador > 31) {
         throw new logic_error("Erro logico - BancoDeRegistradores::getValor");
-        return;
     }
     if (registrador == 0) {
         return 0;

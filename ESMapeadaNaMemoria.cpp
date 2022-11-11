@@ -4,7 +4,6 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-#include <list>
 using namespace std;
 
 ESMapeadaNaMemoria::ESMapeadaNaMemoria(MemoriaRAM* m): Memoria (m) {
@@ -47,7 +46,6 @@ int ESMapeadaNaMemoria::getTamanho() {
 Dado* ESMapeadaNaMemoria::ler(int posicao) {
     if (posicao < 0 || posicao >= getTamanho() + Dispositivos->size()) {
         throw new logic_error("Erro logico - ESMapeadaNaMemoria::ler");
-        return;
     }
     if (posicao < Memoria->getTamanho()) {
         return Memoria->ler(posicao);
@@ -61,16 +59,13 @@ Dado* ESMapeadaNaMemoria::ler(int posicao) {
 void ESMapeadaNaMemoria::escrever(int posicao, Dado* d) {
     if (posicao < 0 || posicao >= getTamanho() + Dispositivos->size()) {
         throw new logic_error("Erro logico - ESMapeadaNaMemoria::escrever");
-        return;
     }
     if (posicao < Memoria->getTamanho()) {
-        list<Dado*>* D = new list<Dado*>();
-        D->push_front(d);
-        return Memoria->escrever(D);
+        Memoria->escrever(posicao, d);
     }
     else {
         posicao -= Memoria->getTamanho();
-        return Dispositivos->at(posicao)->ler();
+        Dispositivos->at(posicao)->ler();
     }
 }
 

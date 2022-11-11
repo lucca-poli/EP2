@@ -6,14 +6,13 @@
 using namespace std;
 
 class MemoriaRAM: public Memoria {
-    private:
-        Dado** Dados;
+    protected:
         int tamanho;
-        int q;
     public:
         MemoriaRAM(int tamanho);
         virtual ~MemoriaRAM();
         virtual void escrever(list<Dado*>* dados);
+        virtual void escrever(int posicao, Dado* d);
         virtual int getTamanho();
         virtual Dado* ler(int posicao);
         virtual void imprimir();
