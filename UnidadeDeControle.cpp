@@ -1,31 +1,26 @@
 #include "UnidadeDeControle.h" 
 #include "BancoDeRegistradores.h"
-#include "MemoriaDeDados.h"
-#include "MemoriaDeInstrucoes.h"
+#include "Memoria.h"
+#include "Instrucao.h"
 #include <iostream>
 using namespace std;
 
-UnidadeDeControle::UnidadeDeControle(BancoDeRegistradores* registradores, MemoriaDeInstrucoes* instrucoes, MemoriaDeDados* dados):
-registradores (registradores), instrucoes (instrucoes), dados (dados) {
+UnidadeDeControle::UnidadeDeControle(BancoDeRegistradores* registradores, Memoria* memoria):
+registradores (registradores), memoria (memoria) {
     this->pc = 0;
 }
 
 UnidadeDeControle::~UnidadeDeControle() {
     delete registradores;
-    delete instrucoes;
-    delete dados;
+    delete memoria;
 }
 
 BancoDeRegistradores* UnidadeDeControle::getBancoDeRegistradores() {
     return this->registradores;
 }
 
-MemoriaDeDados* UnidadeDeControle::getMemoriaDeDados() {
-    return this->dados;
-}
-
-MemoriaDeInstrucoes* UnidadeDeControle::getMemoriaDeInstrucoes() {
-    return this->instrucoes;
+Memoria* UnidadeDeControle::getMemoria() {
+    return this->memoria;
 }
 
 int UnidadeDeControle::getPC() {
@@ -37,70 +32,83 @@ void UnidadeDeControle::setPC(int pc) {
 }
 
 void UnidadeDeControle::executarInstrucao() {
-    if (instrucoes->ler(pc) == NULL) {
+    Instrucao *i = dynamic_cast<Instrucao*>(memoria->ler(pc));
+    if (i == NULL) {
         pc++;
         return;
     }
-    if (instrucoes->ler(pc)->getOpcode() == 0) {
-        if (instrucoes->ler(pc)->getFuncao() == FUNCAO_ADD) {
+
+    const int TIPO_R = 0;
+    const int FUNCAO_ADD = 32;
+    const int FUNCAO_SUB = 34;
+    const int FUNCAO_MULT = 24;
+    const int FUNCAO_DIV = 26;
+    const int J = 2;
+    const int BNE = 5;
+    const int BEQ = 4;
+    const int LW = 35;
+    const int SW = 43;
+
+    if (i->getOpcode() == 0) {
+        if (i->getFuncao() == FUNCAO_ADD) {
             registradores->setValor(
-                instrucoes->ler(pc)->getDestino(), instrucoes->ler(pc)->getOrigem1() + instrucoes->ler(pc)->getOrigem2()
+                i->getDestino(), i->getOrigem1() + i->getOrigem2()
             );
         }
 
-        if (instrucoes->ler(pc)->getFuncao() == FUNCAO_DIV) {
+        if (i->getFuncao() == FUNCAO_DIV) {
             registradores->setValor(
-                FUNCAO_MULT, registradores->getValor(instrucoes->ler(pc)->getOrigem1()) / registradores->getValor(instrucoes->ler(pc)->getOrigem2())
+                FUNCAO_MULT, registradores->getValor(i->getOrigem1()) / registradores->getValor(i->getOrigem2())
             );
             registradores->setValor(
-                25, registradores->getValor(instrucoes->ler(pc)->getOrigem1()) % registradores->getValor(instrucoes->ler(pc)->getOrigem2())
-            );
-        }
-
-        if (instrucoes->ler(pc)->getFuncao() == FUNCAO_MULT) {
-            registradores->setValor(
-                FUNCAO_MULT, registradores->getValor(instrucoes->ler(pc)->getOrigem1()) * registradores->getValor(instrucoes->ler(pc)->getOrigem2())
+                25, registradores->getValor(i->getOrigem1()) % registradores->getValor(i->getOrigem2())
             );
         }
 
-        if (instrucoes->ler(pc)->getFuncao() == FUNCAO_SUB) {
+        if (i->getFuncao() == FUNCAO_MULT) {
             registradores->setValor(
-                instrucoes->ler(pc)->getDestino(), registradores->getValor(instrucoes->ler(pc)->getOrigem1()) - registradores->getValor(instrucoes->ler(pc)->getOrigem2())
+                FUNCAO_MULT, registradores->getValor(i->getOrigem1()) * registradores->getValor(i->getOrigem2())
+            );
+        }
+
+        if (i->getFuncao() == FUNCAO_SUB) {
+            registradores->setValor(
+                i->getDestino(), registradores->getValor(i->getOrigem1()) - registradores->getValor(i->getOrigem2())
             );
         }
     }
-    if (instrucoes->ler(pc)->getOpcode() == J) {
-        pc = instrucoes->ler(pc)->getImediato();
+    if (i->getOpcode() == J) {
+        pc = i->getImediato();
         return;
     }
-    if (instrucoes->ler(pc)->getOpcode() == BNE) {
-        if (registradores->getValor(instrucoes->ler(pc)->getOrigem1()) != registradores->getValor(instrucoes->ler(pc)->getOrigem2())) {
-            pc = instrucoes->ler(pc)->getImediato();
+    if (i->getOpcode() == BNE) {
+        if (registradores->getValor(i->getOrigem1()) != registradores->getValor(i->getOrigem2())) {
+            pc = i->getImediato();
             return;
         }
     }
-    if (instrucoes->ler(pc)->getOpcode() == BEQ) {
-        if (registradores->getValor(instrucoes->ler(pc)->getOrigem1()) == registradores->getValor(instrucoes->ler(pc)->getOrigem2())) {
-            pc = instrucoes->ler(pc)->getImediato();
+    if (i->getOpcode() == BEQ) {
+        if (registradores->getValor(i->getOrigem1()) == registradores->getValor(i->getOrigem2())) {
+            pc = i->getImediato();
             return;
         }
     }
-    if (instrucoes->ler(pc)->getOpcode() == LW) {
-        if (dados->ler(pc) == NULL) {
+    if (i->getOpcode() == LW) {
+        if (memoria->ler(i->getImediato()) == NULL) {
             registradores->setValor(
-            instrucoes->ler(pc)->getDestino(), 0
+            i->getDestino(), 0
         );
         pc++;
         return;
         }
         registradores->setValor(
-            instrucoes->ler(pc)->getDestino(), dados->ler(instrucoes->ler(pc)->getImediato())->getValor()
+            i->getDestino(), memoria->ler(i->getImediato())->getValor()
         );
     }
-    if (instrucoes->ler(pc)->getOpcode() == SW) {
-        Dado* d = new Dado(registradores->getValor(instrucoes->ler(pc)->getDestino()));
-        dados->escrever(
-            instrucoes->ler(pc)->getImediato(), d
+    if (i->getOpcode() == SW) {
+        Dado* d = new Dado(registradores->getValor(i->getDestino()));
+        memoria->escrever(
+            i->getImediato(), d
         );
     }
     pc++;

@@ -1,24 +1,21 @@
 #ifndef UNIDADEDECONTROLE_H
 #define UNIDADEDECONTROLE_H
 #include "BancoDeRegistradores.h"
-#include "MemoriaDeDados.h"
-#include "MemoriaDeInstrucoes.h"
+#include "Memoria.h"
 
 class UnidadeDeControle {
     private:
         int pc;
-        BancoDeRegistradores *registradores;
-        MemoriaDeInstrucoes *instrucoes;
-        MemoriaDeDados *dados;
+        BancoDeRegistradores* registradores;
+        Memoria* memoria;
     public:
-        UnidadeDeControle(BancoDeRegistradores* registradores, MemoriaDeInstrucoes* instrucoes, MemoriaDeDados* dados);
+        UnidadeDeControle(BancoDeRegistradores* registradores, Memoria* memoria);
         virtual ~UnidadeDeControle();
-        BancoDeRegistradores* getBancoDeRegistradores();
-        MemoriaDeDados* getMemoriaDeDados();
-        MemoriaDeInstrucoes* getMemoriaDeInstrucoes();
-        int getPC();
-        void setPC(int pc);
-        void executarInstrucao(); 
+        virtual BancoDeRegistradores* getBancoDeRegistradores();
+        virtual Memoria* getMemoria();
+        virtual int getPC();
+        virtual void setPC(int pc);
+        virtual void executarInstrucao(); 
 };
 
 #endif

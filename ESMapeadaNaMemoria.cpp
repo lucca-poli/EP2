@@ -8,10 +8,12 @@ using namespace std;
 
 ESMapeadaNaMemoria::ESMapeadaNaMemoria(MemoriaRAM* m): Memoria (m) {
     Dispositivos = NULL;
+    Dados = NULL;
 }
 
 ESMapeadaNaMemoria::ESMapeadaNaMemoria(MemoriaRAM* m, vector<Dispositivo*>* dispositivos): Memoria (m) {
     Dispositivos = new vector<Dispositivo*>();
+    Dados = NULL;
     for(unsigned int i = 0; i < dispositivos->size(); i++) {
         Dispositivos->push_back((dispositivos->at(i)));
     }
