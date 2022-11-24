@@ -26,13 +26,25 @@ void MemoriaRAM::escrever(list<Dado*>* dados) {
         if (Dados[j] != NULL) {
             delete Dados[j];
         }
-        Dados[j] = (*i);
-        j++;
+        Dados[j++] = (*i);
     }
 }
 
 void MemoriaRAM::escrever(int posicao, Dado* d) {
-    Memoria::escrever(posicao, d);
+    if (posicao < 0 || posicao >= getTamanho()) {
+        throw new logic_error("Erro logico - Memoria::escrever");
+    }
+    if (Dados[posicao] != NULL) {
+        delete Dados[posicao];
+    }
+    Dados[posicao] = d;
+}
+
+Dado* MemoriaRAM::ler(int posicao) {
+    if (posicao < 0 || posicao >= getTamanho()) {
+        throw new logic_error("Erro logico - Memoria::ler");
+    }
+    return Dados[posicao];
 }
 
 int MemoriaRAM::getTamanho() {

@@ -8,6 +8,7 @@ using namespace std;
 class MemoriaRAM: public Memoria {
     protected:
         int tamanho;
+        Dado** Dados;
     public:
         MemoriaRAM(int tamanho);
         virtual ~MemoriaRAM();

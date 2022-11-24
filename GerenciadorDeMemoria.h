@@ -6,7 +6,7 @@
 using namespace std;
 
 class GerenciadorDeMemoria {
-    protected:
+    private:
     public:
         GerenciadorDeMemoria();
         virtual ~GerenciadorDeMemoria();

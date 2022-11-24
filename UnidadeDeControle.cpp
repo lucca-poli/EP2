@@ -97,9 +97,9 @@ void UnidadeDeControle::executarInstrucao() {
         if (memoria->ler(i->getImediato()) == NULL) {
             registradores->setValor(
             i->getDestino(), 0
-        );
-        pc++;
-        return;
+            );
+            pc++;
+            return;
         }
         registradores->setValor(
             i->getDestino(), memoria->ler(i->getImediato())->getValor()

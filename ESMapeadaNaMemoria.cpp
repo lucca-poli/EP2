@@ -8,12 +8,10 @@ using namespace std;
 
 ESMapeadaNaMemoria::ESMapeadaNaMemoria(MemoriaRAM* m): Memoria (m) {
     Dispositivos = NULL;
-    Dados = NULL;
 }
 
 ESMapeadaNaMemoria::ESMapeadaNaMemoria(MemoriaRAM* m, vector<Dispositivo*>* dispositivos): Memoria (m) {
     Dispositivos = new vector<Dispositivo*>();
-    Dados = NULL;
     for(unsigned int i = 0; i < dispositivos->size(); i++) {
         Dispositivos->push_back((dispositivos->at(i)));
     }
@@ -59,7 +57,7 @@ Dado* ESMapeadaNaMemoria::ler(int posicao) {
 }
 
 void ESMapeadaNaMemoria::escrever(int posicao, Dado* d) {
-    if (posicao < 0 || posicao >= getTamanho() + Dispositivos->size()) {
+    if (posicao < 0 || posicao >= getTamanho()) {
         throw new logic_error("Erro logico - ESMapeadaNaMemoria::escrever");
     }
     if (posicao < Memoria->getTamanho()) {

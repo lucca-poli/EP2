@@ -3,19 +3,6 @@
 #include <stdexcept>
 using namespace std;
 
-void Memoria::escrever(int posicao, Dado* d) {
-    if (posicao < 0 || posicao >= getTamanho()) {
-        throw new logic_error("Erro logico - Memoria::escrever");
-    }
-    if (Dados[posicao] != NULL) {
-        delete Dados[posicao];
-    }
-    Dados[posicao] = d;
-}
+Memoria::Memoria() {}
 
-Dado* Memoria::ler(int posicao) {
-    if (posicao < 0 || posicao >= getTamanho()) {
-        throw new logic_error("Erro logico - Memoria::ler");
-    }
-    return Dados[posicao];
-}
+Memoria::~Memoria() {}
