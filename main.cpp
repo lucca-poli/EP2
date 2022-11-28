@@ -61,6 +61,10 @@ void emulador(UnidadeDeControle* u) {
     if (opcao == 6){
         dump(u);
     }
+    if (opcao == 5){
+    }
+    if (opcao == 6){
+    }
 }
 
 void proxInstrucao(UnidadeDeControle* u) {
