@@ -65,7 +65,7 @@ void ESMapeadaNaMemoria::escrever(int posicao, Dado* d) {
     }
     else {
         posicao -= Memoria->getTamanho();
-        Dispositivos->at(posicao)->ler();
+        Dispositivos->at(posicao)->escrever(d);
     }
 }
 

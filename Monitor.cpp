@@ -8,7 +8,7 @@ Monitor::Monitor() {}
 Monitor::~Monitor() {}
 
 void Monitor::escrever(Dado* d) {
-    cout << d->getValor() << endl;
+    cout << d->getValor();
 }
 
 Dado* Monitor::ler() {

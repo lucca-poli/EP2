@@ -40,6 +40,7 @@ void emulador(UnidadeDeControle* u) {
     cout << "0) Sair" << endl;
     cout << "Escolha uma opcao: ";
     cin >> opcao;  
+    cout << endl;
     if (opcao == 0) {
         return;
     }  
@@ -61,10 +62,6 @@ void emulador(UnidadeDeControle* u) {
     if (opcao == 6){
         dump(u);
     }
-    if (opcao == 5){
-    }
-    if (opcao == 6){
-    }
 }
 
 void proxInstrucao(UnidadeDeControle* u) {
@@ -80,10 +77,12 @@ void proxInstrucao(UnidadeDeControle* u) {
         cout << e->what() << endl;
         delete e;
     }
+    cout << endl;
     emulador(u);
 }
 
 void executarZero(UnidadeDeControle* u){
+    if (u->getPC() == 0) u->executarInstrucao();
     while (u->getPC() != 0){
         u->executarInstrucao();
         try {
@@ -96,6 +95,7 @@ void executarZero(UnidadeDeControle* u){
             break;
         }
     }
+    cout << endl;
     emulador(u);
 }
 
@@ -106,7 +106,8 @@ void registrador(UnidadeDeControle* u) {
     cout << "2) Imprimir" << endl;
     cout << "0) Voltar" << endl;
     cout << "Escolha uma opcao: ";
-    cin >> opcao;  
+    cin >> opcao; 
+    cout << endl; 
     if (opcao == 0) {
         emulador(u);
     }  
@@ -125,11 +126,13 @@ void alteraRegistrador(UnidadeDeControle* u) {
     cout << "Novo valor: ";
     cin >> newValor;
     u->getBancoDeRegistradores()->setValor(posicao, newValor);
+    cout << endl;
     registrador(u);
 }
 
 void ImprimeR(UnidadeDeControle* u) {
     u->getBancoDeRegistradores()->imprimir();
+    cout << endl;
     registrador(u);
 }
 
@@ -141,7 +144,7 @@ void memoria(UnidadeDeControle* u) {
     cout << "0) Voltar" << endl;
     cout << "Escolha uma opcao: ";
     cin >> opcao;
-
+    cout << endl;
     if (opcao == 1) {
         alteraMemoria(u);
     }
@@ -161,29 +164,35 @@ void alteraMemoria(UnidadeDeControle* u) {
     cin >> novoValor;
     Dado* d = new Dado(novoValor);
     u->getMemoria()->escrever(memo, d);
+    cout << endl;
     memoria(u);
 }
 
 void imprimeM(UnidadeDeControle* u) {
     u->getMemoria()->imprimir();
+    cout << endl;
     memoria(u);
 }
 
 void load(UnidadeDeControle* u) {
     string arquivoOrigem;
+    cout << "Arquivo origem: ";
     cin >> arquivoOrigem;
     ESMapeadaNaMemoria* m = dynamic_cast<ESMapeadaNaMemoria*>(u->getMemoria());
     GerenciadorDeMemoria* g = new GerenciadorDeMemoria();
     g->load(arquivoOrigem, m->getMemoriaSubjacente());
+    cout << endl;
     emulador(u);
 }
 
 void dump(UnidadeDeControle* u) {
-    string arquivoOrigem;
-    cin >> arquivoOrigem;
+    string arquivoDestino;
+    cout << "Arquivo destino: ";
+    cin >> arquivoDestino;
     ESMapeadaNaMemoria* m = dynamic_cast<ESMapeadaNaMemoria*>(u->getMemoria());
     GerenciadorDeMemoria* g = new GerenciadorDeMemoria();
-    g->dump(arquivoOrigem, m->getMemoriaSubjacente());
+    g->dump(arquivoDestino, m->getMemoriaSubjacente());
+    cout << endl;
     emulador(u);
 }
 
@@ -234,6 +243,11 @@ void preDados1(UnidadeDeControle* u) {
 void preInstrucoes1(UnidadeDeControle* u) {}
     
 int main() {
-    ep();
+    try {
+        ep();
+    } catch (exception* e) {
+        cout << e->what();
+        delete e;
+    }
     return 0;
 }

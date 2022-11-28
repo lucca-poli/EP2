@@ -52,7 +52,7 @@ void UnidadeDeControle::executarInstrucao() {
     if (i->getOpcode() == 0) {
         if (i->getFuncao() == FUNCAO_ADD) {
             registradores->setValor(
-                i->getDestino(), i->getOrigem1() + i->getOrigem2()
+                i->getDestino(), registradores->getValor(i->getOrigem1()) + registradores->getValor(i->getOrigem2())
             );
         }
 
@@ -94,7 +94,8 @@ void UnidadeDeControle::executarInstrucao() {
         }
     }
     if (i->getOpcode() == LW) {
-        if (memoria->ler(i->getImediato()) == NULL) {
+        Dado* d = memoria->ler(i->getImediato());
+        if (d == NULL) {
             registradores->setValor(
             i->getDestino(), 0
             );
@@ -102,7 +103,7 @@ void UnidadeDeControle::executarInstrucao() {
             return;
         }
         registradores->setValor(
-            i->getDestino(), memoria->ler(i->getImediato())->getValor()
+            i->getDestino(), d->getValor()
         );
     }
     if (i->getOpcode() == SW) {
