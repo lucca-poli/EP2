@@ -1,27 +1,28 @@
 #include "UnidadeDeControle.h"
 #include "BancoDeRegistradores.h"
-#include "Dispositivo.h"
 #include "ESMapeadaNaMemoria.h"
-#include "GerenciadorDeMemoria.h"
-#include "Memoria.h"
 #include "MemoriaRAM.h"
 #include "Monitor.h"
 #include "MonitorDeChar.h"
+#include "Teclado.h"
+#include "TecladoDeChar.h"
 #include "Dado.h"
 #include "Instrucao.h"
+#include <stdexcept>
 #include <iostream>
 using namespace std;
 
 void emulador(UnidadeDeControle* u); 
-void proxInst(UnidadeDeControle* u); 
-void regis(UnidadeDeControle* u); 
-void altValor(UnidadeDeControle* u); 
-void Imprimir(UnidadeDeControle* u); 
+void proxInstrucao(UnidadeDeControle* u); 
+void registrador(UnidadeDeControle* u); 
+void alteraRegistrador(UnidadeDeControle* u); 
+void ImprimeR(UnidadeDeControle* u); 
 void memoria(UnidadeDeControle* u); 
-void alteraValor(UnidadeDeControle* u); 
-void imprime(UnidadeDeControle* u);
+void alteraMemoria(UnidadeDeControle* u); 
+void imprimeM(UnidadeDeControle* u);
 void exec(UnidadeDeControle* u); 
-void teste(); 
+void ep();
+void teste1(); 
 
 void emulador(UnidadeDeControle* u) {
     int opcao;
@@ -42,31 +43,49 @@ void emulador(UnidadeDeControle* u) {
         memoria(u);
     }
     if (opcao == 2) {
-        regis(u);
+        registrador(u);
     }
     if (opcao == 3) {
-        proxInst(u);
+        proxInstrucao(u);
     }
     if (opcao == 4){
         exec(u);
     }
 }
 
-void proxInst(UnidadeDeControle* u) {
+void proxInstrucao(UnidadeDeControle* u) {
     cout << "PC: " << u->getPC() << endl;
     u->executarInstrucao();
     cout << "Instrucao executada" << endl;
     cout << "PC: " << u->getPC() << endl;
+    try {
+        if (u->getPC() > u->getMemoria()->getTamanho() - 1) {
+            throw new invalid_argument("PC tenta acessar memoria inexistente");
+        }
+    } catch (invalid_argument *e) {
+        e->what();
+        delete e;
+    }
     emulador(u);
 }
 
 void exec(UnidadeDeControle* u){
     while (u->getPC() != 0){
         u->executarInstrucao();
+        try {
+            if (u->getPC() > u->getMemoria()->getTamanho() - 1) {
+                throw new invalid_argument("PC tenta acessar memoria inexistente");
+            }
+        } catch (invalid_argument *e) {
+            e->what();
+            delete e;
+            break;
+        }
     }
+    emulador(u);
 }
 
-void regis(UnidadeDeControle* u) {
+void registrador(UnidadeDeControle* u) {
     int opcao;
     cout << "Registradores" << endl;
     cout << "1) Alterar valor" << endl;
@@ -78,49 +97,49 @@ void regis(UnidadeDeControle* u) {
         emulador(u);
     }  
     if (opcao == 1) {
-        altValor(u);
+        alteraRegistrador(u);
     }
     if (opcao == 2) {
-        Imprimir(u);
+        ImprimeR(u);
     }
 }
 
-void altValor(UnidadeDeControle* u) {
-    int Regis, newValor;
+void alteraRegistrador(UnidadeDeControle* u) {
+    int posicao, newValor;
     cout << "Registrador a ser alterado: ";
-    cin >> Regis;
+    cin >> posicao;
     cout << "Novo valor: ";
     cin >> newValor;
-    u->getBancoDeRegistradores()->setValor(Regis, newValor);
-    regis(u);
+    u->getBancoDeRegistradores()->setValor(posicao, newValor);
+    registrador(u);
 }
 
-void Imprimir(UnidadeDeControle* u) {
+void ImprimeR(UnidadeDeControle* u) {
     u->getBancoDeRegistradores()->imprimir();
-    regis(u);
+    registrador(u);
 }
 
 void memoria(UnidadeDeControle* u) {
+    int opcao;
     cout << "Memoria" << endl;
-    cout << "1) Alterar valor" << endl;
+    cout << "1) Alterar dado" << endl;
     cout << "2) Imprimir" << endl;
     cout << "0) Voltar" << endl;
     cout << "Escolha uma opcao: ";
-    int opcao;
     cin >> opcao;
 
     if (opcao == 1) {
-        alteraValor(u);
+        alteraMemoria(u);
     }
     if (opcao == 2) {
-        imprime(u);
+        imprimeM(u);
     }
     if (opcao == 0) {
         emulador(u);
     }
 }
 
-void alteraValor(UnidadeDeControle* u) {
+void alteraMemoria(UnidadeDeControle* u) {
     int memo, novoValor;
     cout << "Posicao a ser alterada: ";
     cin >> memo;
@@ -131,40 +150,28 @@ void alteraValor(UnidadeDeControle* u) {
     memoria(u);
 }
 
-void imprime(UnidadeDeControle* u) {
+void imprimeM(UnidadeDeControle* u) {
     u->getMemoria()->imprimir();
     memoria(u);
 }
 
-void teste() {
-    BancoDeRegistradores* R1 = new BancoDeRegistradores();
+void ep() {
+    BancoDeRegistradores* R = new BancoDeRegistradores();
     MemoriaRAM* RAM = new MemoriaRAM(64);
-    ESMapeadaNaMemoria* ES1 = new ESMapeadaNaMemoria(RAM);
-    UnidadeDeControle* U1 = new UnidadeDeControle(R1, I1, D1);
-    Instrucao* i0 = new Instrucao(LW, 0, 0, 8, 0, 0);
-    Instrucao* i1 = new Instrucao(LW, 0, 0, 9, 1, 0);
-    Instrucao* i2 = new Instrucao(LW, 0, 0, 10, 2, 0);
-    Instrucao* i3 = new Instrucao(BNE, 9, 10, 0, 7, 0);
-    Instrucao* i4 = new Instrucao(0, 8, 10, 0, 0, FUNCAO_MULT);
-    Instrucao* i5 = new Instrucao(SW, 0, 0, 24, 3, 0);
-    Instrucao* i6 = new Instrucao(J, 0, 0, 0, 0, 0);
-    Instrucao* i7 = new Instrucao(0, 10, 8, 9, 0, FUNCAO_ADD);
-    Instrucao* i8 = new Instrucao(SW, 0, 0, 9, 3, 0);
-    Instrucao* i9 = new Instrucao(J, 0, 0, 0, 10, 0);
-    I1->escrever(0, i0);
-    I1->escrever(1, i1);
-    I1->escrever(2, i2);
-    I1->escrever(3, i3);
-    I1->escrever(4, i4);
-    I1->escrever(5, i5);
-    I1->escrever(6, i6);
-    I1->escrever(7, i7);
-    I1->escrever(8, i8);
-    I1->escrever(9, i9);
-    emulador(U1);
+    ESMapeadaNaMemoria* ES = new ESMapeadaNaMemoria(RAM);
+    Teclado* teclado = new Teclado();
+    TecladoDeChar* tecladoChar = new TecladoDeChar();
+    Monitor* monitor = new Monitor();
+    MonitorDeChar* monitorChar = new MonitorDeChar();
+    ES->adicionar(teclado);
+    ES->adicionar(tecladoChar);
+    ES->adicionar(monitor);
+    ES->adicionar(monitorChar);
+    UnidadeDeControle* U = new UnidadeDeControle(R, ES);
+    emulador(U);
 }
     
 int main() {
-    teste();
+    ep();
     return 0;
 }
