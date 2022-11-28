@@ -3,6 +3,10 @@
 #include <iostream>
 using namespace std;
 
+Teclado::Teclado() {}
+
+Teclado::~Teclado() {}
+
 void Teclado::escrever(Dado* d) {
     throw new logic_error("Teclado aceita apenas entradas");
 }

@@ -7,7 +7,7 @@
 using namespace std;
 
 ESMapeadaNaMemoria::ESMapeadaNaMemoria(MemoriaRAM* m): Memoria (m) {
-    Dispositivos = NULL;
+    Dispositivos = new vector<Dispositivo*>();
 }
 
 ESMapeadaNaMemoria::ESMapeadaNaMemoria(MemoriaRAM* m, vector<Dispositivo*>* dispositivos): Memoria (m) {

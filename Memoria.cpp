@@ -1,7 +1,4 @@
-#include <Memoria.h>
-#include <Dado.h>
-#include <stdexcept>
-using namespace std;
+#include "Memoria.h"
 
 Memoria::Memoria() {}
 

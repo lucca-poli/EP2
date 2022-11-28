@@ -3,6 +3,10 @@
 #include <iostream>
 using namespace std;
 
+TecladoDeChar::TecladoDeChar() {}
+
+TecladoDeChar::~TecladoDeChar() {}
+
 Dado* TecladoDeChar::ler() {
     cout << "Digite um caractere: ";
     char c;

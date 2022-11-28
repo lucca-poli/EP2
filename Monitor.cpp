@@ -3,6 +3,10 @@
 #include <iostream>
 using namespace std;
 
+Monitor::Monitor() {}
+
+Monitor::~Monitor() {}
+
 void Monitor::escrever(Dado* d) {
     cout << d->getValor() << endl;
 }

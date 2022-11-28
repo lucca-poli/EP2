@@ -1,6 +1,7 @@
 #include "UnidadeDeControle.h"
 #include "BancoDeRegistradores.h"
 #include "ESMapeadaNaMemoria.h"
+#include "GerenciadorDeMemoria.h"
 #include "MemoriaRAM.h"
 #include "Monitor.h"
 #include "MonitorDeChar.h"
@@ -20,9 +21,12 @@ void ImprimeR(UnidadeDeControle* u);
 void memoria(UnidadeDeControle* u); 
 void alteraMemoria(UnidadeDeControle* u); 
 void imprimeM(UnidadeDeControle* u);
-void exec(UnidadeDeControle* u); 
+void executarZero(UnidadeDeControle* u);
+void load(UnidadeDeControle* u);
+void dump(UnidadeDeControle* u); 
 void ep();
-void teste1(); 
+void preDados1(UnidadeDeControle* u);
+void preInstrucoes1(UnidadeDeControle* u); 
 
 void emulador(UnidadeDeControle* u) {
     int opcao;
@@ -49,7 +53,13 @@ void emulador(UnidadeDeControle* u) {
         proxInstrucao(u);
     }
     if (opcao == 4){
-        exec(u);
+        executarZero(u);
+    }
+    if (opcao == 5) {
+        load(u);
+    }
+    if (opcao == 6){
+        dump(u);
     }
 }
 
@@ -63,13 +73,13 @@ void proxInstrucao(UnidadeDeControle* u) {
             throw new invalid_argument("PC tenta acessar memoria inexistente");
         }
     } catch (invalid_argument *e) {
-        e->what();
+        cout << e->what() << endl;
         delete e;
     }
     emulador(u);
 }
 
-void exec(UnidadeDeControle* u){
+void executarZero(UnidadeDeControle* u){
     while (u->getPC() != 0){
         u->executarInstrucao();
         try {
@@ -77,7 +87,7 @@ void exec(UnidadeDeControle* u){
                 throw new invalid_argument("PC tenta acessar memoria inexistente");
             }
         } catch (invalid_argument *e) {
-            e->what();
+            cout << e->what() << endl;
             delete e;
             break;
         }
@@ -155,6 +165,25 @@ void imprimeM(UnidadeDeControle* u) {
     memoria(u);
 }
 
+void load(UnidadeDeControle* u) {
+    string arquivoOrigem;
+    cin >> arquivoOrigem;
+    ESMapeadaNaMemoria* m = dynamic_cast<ESMapeadaNaMemoria*>(u->getMemoria());
+    GerenciadorDeMemoria* g = new GerenciadorDeMemoria();
+    g->load(arquivoOrigem, m->getMemoriaSubjacente());
+    emulador(u);
+}
+
+void dump(UnidadeDeControle* u) {
+    string arquivoOrigem;
+    cin >> arquivoOrigem;
+    ESMapeadaNaMemoria* m = dynamic_cast<ESMapeadaNaMemoria*>(u->getMemoria());
+    GerenciadorDeMemoria* g = new GerenciadorDeMemoria();
+    g->dump(arquivoOrigem, m->getMemoriaSubjacente());
+    emulador(u);
+}
+
+
 void ep() {
     BancoDeRegistradores* R = new BancoDeRegistradores();
     MemoriaRAM* RAM = new MemoriaRAM(64);
@@ -170,6 +199,35 @@ void ep() {
     UnidadeDeControle* U = new UnidadeDeControle(R, ES);
     emulador(U);
 }
+
+void preDados1(UnidadeDeControle* u) {
+    Dado* d0 = new Dado(1);
+    Dado* d1 = new Dado(70);
+    Dado* d2 = new Dado(97);
+    Dado* d3 = new Dado(116);
+    Dado* d4 = new Dado(111);
+    Dado* d5 = new Dado(114);
+    Dado* d6 = new Dado(105);
+    Dado* d7 = new Dado(97);
+    Dado* d8 = new Dado(108);
+    Dado* d9 = new Dado(58);
+    Dado* d10 = new Dado(32);
+    Dado* d11 = new Dado(10);
+    u->getMemoria()->escrever(1, d0);
+    u->getMemoria()->escrever(2, d1);
+    u->getMemoria()->escrever(3, d2);
+    u->getMemoria()->escrever(4, d3);
+    u->getMemoria()->escrever(5, d4);
+    u->getMemoria()->escrever(6, d5);
+    u->getMemoria()->escrever(7, d6);
+    u->getMemoria()->escrever(8, d7);
+    u->getMemoria()->escrever(9, d8);
+    u->getMemoria()->escrever(10, d9);
+    u->getMemoria()->escrever(11, d10);
+    u->getMemoria()->escrever(12, d11);
+}
+
+void preInstrucoes1(UnidadeDeControle* u) {}
     
 int main() {
     ep();
