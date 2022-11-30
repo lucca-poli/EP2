@@ -21,7 +21,7 @@ void ImprimeR(UnidadeDeControle* u);
 void memoria(UnidadeDeControle* u); 
 void alteraMemoria(UnidadeDeControle* u); 
 void imprimeM(UnidadeDeControle* u);
-void executarZero(UnidadeDeControle* u);
+void executarAteZero(UnidadeDeControle* u);
 void load(UnidadeDeControle* u);
 void dump(UnidadeDeControle* u); 
 void ep();
@@ -42,6 +42,7 @@ void emulador(UnidadeDeControle* u) {
     cin >> opcao;  
     cout << endl;
     if (opcao == 0) {
+        delete u;
         return;
     }  
     if (opcao == 1) {
@@ -54,7 +55,7 @@ void emulador(UnidadeDeControle* u) {
         proxInstrucao(u);
     }
     if (opcao == 4){
-        executarZero(u);
+        executarAteZero(u);
     }
     if (opcao == 5) {
         load(u);
@@ -66,33 +67,26 @@ void emulador(UnidadeDeControle* u) {
 
 void proxInstrucao(UnidadeDeControle* u) {
     cout << "PC: " << u->getPC() << endl;
-    u->executarInstrucao();
-    cout << "Instrucao executada" << endl;
-    cout << "PC: " << u->getPC() << endl;
     try {
-        if (u->getPC() > u->getMemoria()->getTamanho() - 1) {
-            throw new invalid_argument("PC tenta acessar memoria inexistente");
-        }
-    } catch (invalid_argument *e) {
+        u->executarInstrucao();
+    } catch (exception *e) {
         cout << e->what() << endl;
         delete e;
     }
+    cout << "Instrucao executada" << endl;
+    cout << "PC: " << u->getPC() << endl;
     cout << endl;
     emulador(u);
 }
 
-void executarZero(UnidadeDeControle* u){
+void executarAteZero(UnidadeDeControle* u){
     if (u->getPC() == 0) u->executarInstrucao();
     while (u->getPC() != 0){
-        u->executarInstrucao();
         try {
-            if (u->getPC() > u->getMemoria()->getTamanho() - 1) {
-                throw new invalid_argument("PC tenta acessar memoria inexistente");
-            }
-        } catch (invalid_argument *e) {
+            u->executarInstrucao();
+        } catch (exception *e) {
             cout << e->what() << endl;
             delete e;
-            break;
         }
     }
     cout << endl;
@@ -180,7 +174,13 @@ void load(UnidadeDeControle* u) {
     cin >> arquivoOrigem;
     ESMapeadaNaMemoria* m = dynamic_cast<ESMapeadaNaMemoria*>(u->getMemoria());
     GerenciadorDeMemoria* g = new GerenciadorDeMemoria();
-    g->load(arquivoOrigem, m->getMemoriaSubjacente());
+    try {
+        g->load(arquivoOrigem, m->getMemoriaSubjacente());
+    } catch (exception* e) {
+        cout << e->what();
+        delete e;
+    }
+    delete g;
     cout << endl;
     emulador(u);
 }
@@ -191,7 +191,13 @@ void dump(UnidadeDeControle* u) {
     cin >> arquivoDestino;
     ESMapeadaNaMemoria* m = dynamic_cast<ESMapeadaNaMemoria*>(u->getMemoria());
     GerenciadorDeMemoria* g = new GerenciadorDeMemoria();
-    g->dump(arquivoDestino, m->getMemoriaSubjacente());
+    try {
+        g->dump(arquivoDestino, m->getMemoriaSubjacente());
+    } catch (exception* e) {
+        cout << e->what();
+        delete e;
+    }
+    delete g;
     cout << endl;
     emulador(u);
 }
