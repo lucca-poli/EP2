@@ -219,41 +219,7 @@ void ep() {
     emulador(U);
 }
 
-void preDados1(UnidadeDeControle* u) {
-    Dado* d0 = new Dado(1);
-    Dado* d1 = new Dado(70);
-    Dado* d2 = new Dado(97);
-    Dado* d3 = new Dado(116);
-    Dado* d4 = new Dado(111);
-    Dado* d5 = new Dado(114);
-    Dado* d6 = new Dado(105);
-    Dado* d7 = new Dado(97);
-    Dado* d8 = new Dado(108);
-    Dado* d9 = new Dado(58);
-    Dado* d10 = new Dado(32);
-    Dado* d11 = new Dado(10);
-    u->getMemoria()->escrever(1, d0);
-    u->getMemoria()->escrever(2, d1);
-    u->getMemoria()->escrever(3, d2);
-    u->getMemoria()->escrever(4, d3);
-    u->getMemoria()->escrever(5, d4);
-    u->getMemoria()->escrever(6, d5);
-    u->getMemoria()->escrever(7, d6);
-    u->getMemoria()->escrever(8, d7);
-    u->getMemoria()->escrever(9, d8);
-    u->getMemoria()->escrever(10, d9);
-    u->getMemoria()->escrever(11, d10);
-    u->getMemoria()->escrever(12, d11);
-}
-
-void preInstrucoes1(UnidadeDeControle* u) {}
-    
 int main() {
-    try {
-        ep();
-    } catch (exception* e) {
-        cout << e->what();
-        delete e;
-    }
+    ep();
     return 0;
 }
