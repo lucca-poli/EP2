@@ -2,17 +2,6 @@
 #include <iostream>
 using namespace std;
 
-const int Instrucao::TIPO_R = 0;
-const int Instrucao::FUNCAO_ADD = 32;
-const int Instrucao::FUNCAO_SUB = 34;
-const int Instrucao::FUNCAO_MULT = 24;
-const int Instrucao::FUNCAO_DIV = 26;
-const int Instrucao::J = 2;
-const int Instrucao::BNE = 5;
-const int Instrucao::BEQ = 4;
-const int Instrucao::LW = 35;
-const int Instrucao::SW = 43;
-
 Instrucao::Instrucao(int valor, int origem1, int origem2, int destino, int imediato, int funcao):
 Dado (valor), origem1 (origem1), origem2 (origem2), destino (destino), imediato (imediato), funcao (funcao) {
 }

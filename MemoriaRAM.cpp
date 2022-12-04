@@ -23,9 +23,6 @@ void MemoriaRAM::escrever(list<Dado*>* dados) {
     }
     int j = 0;
     for (list<Dado*>::iterator i = dados->begin(); i != dados->end(); i++) {
-        if (Dados[j] != NULL) {
-            delete Dados[j];
-        }
         Dados[j++] = (*i);
     }
 }

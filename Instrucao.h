@@ -9,18 +9,19 @@ class Instrucao: public Dado{
         int destino;
         int imediato;
         int funcao;
-        static const int TIPO_R;
-        static const int FUNCAO_ADD;
-        static const int FUNCAO_SUB;
-        static const int FUNCAO_MULT;
-        static const int FUNCAO_DIV;
-        static const int J;
-        static const int BNE;
-        static const int BEQ;
-        static const int LW;
-        static const int SW;
         Instrucao(int valor, int origem1, int origem2, int destino, int imediato, int funcao);
     public:
+        static const int LW = 35;
+        static const int SW = 43;
+        static const int J = 2;
+        static const int BNE = 5;
+        static const int BEQ = 4;
+        static const int TIPO_R = 0;
+        static const int FUNCAO_ADD = 32;
+        static const int FUNCAO_SUB = 34;
+        static const int FUNCAO_MULT = 24;
+        static const int FUNCAO_DIV = 26; 
+
         static Instrucao* criarLW(int destino, int imediato);
         static Instrucao* criarSW(int destino, int imediato);
         static Instrucao* criarJ(int imediato);

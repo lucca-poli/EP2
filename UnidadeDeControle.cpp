@@ -38,62 +38,55 @@ void UnidadeDeControle::executarInstrucao() {
         return;
     }
 
-    const int TIPO_R = 0;
-    const int FUNCAO_ADD = 32;
-    const int FUNCAO_SUB = 34;
-    const int FUNCAO_MULT = 24;
-    const int FUNCAO_DIV = 26;
-    const int J = 2;
-    const int BNE = 5;
-    const int BEQ = 4;
-    const int LW = 35;
-    const int SW = 43;
-
     if (i->getOpcode() == 0) {
-        if (i->getFuncao() == FUNCAO_ADD) {
+        if (i->getFuncao() == Instrucao::FUNCAO_ADD) {
             registradores->setValor(
                 i->getDestino(), registradores->getValor(i->getOrigem1()) + registradores->getValor(i->getOrigem2())
             );
         }
 
-        if (i->getFuncao() == FUNCAO_DIV) {
+        if (i->getFuncao() == Instrucao::FUNCAO_DIV) {
             registradores->setValor(
-                FUNCAO_MULT, registradores->getValor(i->getOrigem1()) / registradores->getValor(i->getOrigem2())
+                Instrucao::FUNCAO_MULT, registradores->getValor(i->getOrigem1()) / registradores->getValor(i->getOrigem2())
             );
             registradores->setValor(
                 25, registradores->getValor(i->getOrigem1()) % registradores->getValor(i->getOrigem2())
             );
         }
 
-        if (i->getFuncao() == FUNCAO_MULT) {
+        if (i->getFuncao() == Instrucao::FUNCAO_MULT) {
             registradores->setValor(
-                FUNCAO_MULT, registradores->getValor(i->getOrigem1()) * registradores->getValor(i->getOrigem2())
+                Instrucao::FUNCAO_MULT, registradores->getValor(i->getOrigem1()) * registradores->getValor(i->getOrigem2())
             );
         }
 
-        if (i->getFuncao() == FUNCAO_SUB) {
+        if (i->getFuncao() == Instrucao::FUNCAO_SUB) {
             registradores->setValor(
                 i->getDestino(), registradores->getValor(i->getOrigem1()) - registradores->getValor(i->getOrigem2())
             );
         }
     }
-    if (i->getOpcode() == J) {
+    
+    if (i->getOpcode() == Instrucao::J) {
         pc = i->getImediato();
         return;
     }
-    if (i->getOpcode() == BNE) {
+
+    if (i->getOpcode() == Instrucao::BNE) {
         if (registradores->getValor(i->getOrigem1()) != registradores->getValor(i->getOrigem2())) {
             pc = i->getImediato();
             return;
         }
     }
-    if (i->getOpcode() == BEQ) {
+
+    if (i->getOpcode() == Instrucao::BEQ) {
         if (registradores->getValor(i->getOrigem1()) == registradores->getValor(i->getOrigem2())) {
             pc = i->getImediato();
             return;
         }
     }
-    if (i->getOpcode() == LW) {
+
+    if (i->getOpcode() == Instrucao::LW) {
         Dado* d = memoria->ler(i->getImediato());
         if (d == NULL) {
             registradores->setValor(
@@ -106,7 +99,8 @@ void UnidadeDeControle::executarInstrucao() {
             i->getDestino(), d->getValor()
         );
     }
-    if (i->getOpcode() == SW) {
+
+    if (i->getOpcode() == Instrucao::SW) {
         Dado* d = new Dado(registradores->getValor(i->getDestino()));
         memoria->escrever(
             i->getImediato(), d

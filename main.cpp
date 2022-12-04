@@ -23,8 +23,7 @@ void alteraMemoria(UnidadeDeControle* u);
 void imprimeM(UnidadeDeControle* u);
 void executarAteZero(UnidadeDeControle* u);
 void load(UnidadeDeControle* u);
-void dump(UnidadeDeControle* u); 
-void ep();
+void dump(UnidadeDeControle* u);
 void preDados1(UnidadeDeControle* u);
 void preInstrucoes1(UnidadeDeControle* u); 
 
@@ -202,8 +201,7 @@ void dump(UnidadeDeControle* u) {
     emulador(u);
 }
 
-
-void ep() {
+int main() {
     BancoDeRegistradores* R = new BancoDeRegistradores();
     MemoriaRAM* RAM = new MemoriaRAM(64);
     ESMapeadaNaMemoria* ES = new ESMapeadaNaMemoria(RAM);
@@ -217,9 +215,5 @@ void ep() {
     ES->adicionar(monitorChar);
     UnidadeDeControle* U = new UnidadeDeControle(R, ES);
     emulador(U);
-}
-
-int main() {
-    ep();
     return 0;
 }
